@@ -1,0 +1,65 @@
+<!DOCTYPE html> 
+<html> 
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+<title>Daum 지도 API v3 예제: 좌표로 주소 구하기</title> 
+<script type="text/javascript" src="http://apis.daum.net/maps/maps3.js?apikey=DAUM_MAPS_DEMO_APIKEY" charset="utf-8"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.7.2.min.js" charset="utf-8"></script>
+<script type="text/javascript"> 
+	
+	var map;
+	var marker;
+
+	function init() {
+		//지도 init
+		map =  new daum.maps.Map(document.getElementById('map'), {
+			center: new daum.maps.LatLng(37.537123, 127.005523),
+			level : 7
+		});
+
+		//지도 컨트롤 추가
+		var zoomControl = new daum.maps.ZoomControl();
+		map.addControl(zoomControl, daum.maps.ControlPosition.RIGHT);
+		var mapTypeControl = new daum.maps.MapTypeControl();
+		map.addControl(mapTypeControl, daum.maps.ControlPosition.TOPRIGHT);
+		
+		//마커 설정 및 이벤트 등록
+		marker = new daum.maps.Marker();
+		daum.maps.event.addListener(map,"click",function(event){
+			marker.setMap(null);
+			marker = new daum.maps.Marker({
+				position: event.latLng
+			});
+			marker.setMap(map);
+			
+			//Daum 로컬 API 요청변수 설정
+			var param = {};
+			param.longitude = event.latLng.getLng();
+			param.latitude = event.latLng.getLat();
+			param.output = "json";
+			param.apikey = "DAUM_LOCAL_DEMO_APIKEY";
+
+			//주소 정보 호출하기
+			$.ajax({
+				url : "http://apis.daum.net/local/geo/coord2addr",
+				crossDomain: true,
+				data : param,
+				type : "GET",
+				dataType: "jsonp",
+				success : function(data){
+					$('#addr').val( data.fullName );	//주소 표시
+				}
+			});
+		});
+	}
+</script> 
+</head> 
+<body onload="init()">
+	<div style="width:600px">
+		<center><h2>지도를 클릭하시면 주소가 표시됩니다.</h2></center>
+		<input type="text" id="addr" style="width:100%"/><br/>
+	</div>
+	<div id="map" style="width:600px;height:400px;"></div> 
+</body> 
+</html> 
+
