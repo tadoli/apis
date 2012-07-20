@@ -17,12 +17,6 @@
 			level : 7
 		});
 
-		//지도 컨트롤 추가
-		var zoomControl = new daum.maps.ZoomControl();
-		map.addControl(zoomControl, daum.maps.ControlPosition.RIGHT);
-		var mapTypeControl = new daum.maps.MapTypeControl();
-		map.addControl(mapTypeControl, daum.maps.ControlPosition.TOPRIGHT);
-		
 		//마커 설정 및 이벤트 등록
 		marker = new daum.maps.Marker();
 		daum.maps.event.addListener(map,"click",function(event){
@@ -55,11 +49,8 @@
 </script> 
 </head> 
 <body onload="init()">
-	<div style="width:600px">
-		<center><h2>지도를 클릭하시면 주소가 표시됩니다.</h2></center>
-		<input type="text" id="addr" style="width:100%"/><br/>
-	</div>
+	<h2>지도를 클릭하시면 주소가 표시됩니다.</h2>
+    	<input type="text" id="addr"/><br/>
 	<div id="map" style="width:600px;height:400px;"></div> 
 </body> 
 </html> 
-
